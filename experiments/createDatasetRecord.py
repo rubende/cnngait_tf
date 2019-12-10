@@ -232,7 +232,6 @@ def create_tfrecord_155_testVote(batch, filenames0):
 def create_tfrecord_155_predict(batch, filenames0):
 
     dataset = tf.data.TFRecordDataset(filenames0)
-    dataset = dataset.shuffle(buffer_size=(len(filenames0)))
     dataset = dataset.repeat()
     dataset = dataset.prefetch(int(len(filenames0)/batch))
     dataset = dataset.batch(batch_size=batch)

@@ -10,9 +10,9 @@ from scipy import stats
 import math
 
 
-PATH_ID_FILE = "tumgaidtestids.lst"
-PATH_25F_INPUT = '/MulPerGait_two_persons_cnn_25f/'
-PATH_MODEL_CNN = '/outputs/model_155.h5'
+PATH_ID_FILE = "tumgaidtestids.lst"                             # File with the IDs of the users that we are going to use
+PATH_25F_INPUT = '/MulPerGait_two_persons_cnn_25f/'             # Path with samples windows with 25 frame
+PATH_MODEL_CNN = "/outputs/model_155.h5"                        # Model_155 path
 
 
 

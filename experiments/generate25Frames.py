@@ -52,6 +52,8 @@ def create_tf_example(data):
 
 np.random.seed(0)
 
+n_frames = 25
+
 im_height = 480
 im_width = 640
 
@@ -74,20 +76,18 @@ for file in paths_of:
     with open(PATH_TO_TR + file[:-10] + '.pkl', 'rb') as f:
         [detection_list, position_list] = pickle.load(f)
 
-    cap = cv2.VideoCapture(PATH_TO_IMAGE + file[:-10] + ".mp4")
-
     of_output = []
     for i in range(0, len(of_file['S']['frix'][0]), 5):
-        frames = of_file['S']['frix'][0][i:i+25][0][0]
-        ofs = of_file['S']['of'][0][i:i+25]
-        sub_detection_list = detection_list[i:i+25]
-        sub_position_list = position_list[i:i+25]
+        frames = of_file['S']['frix'][0][i:i+n_frames][0][0]
+        ofs = of_file['S']['of'][0][i:i+n_frames]
+        sub_detection_list = detection_list[i:i+n_frames]
+        sub_position_list = position_list[i:i+n_frames]
 
         centroides_bb = []
         bb = []
         of_resizes = []
 
-        if len(ofs) < 25:
+        if len(ofs) < n_frames:
             continue
 
         for j in range(len(ofs)):
@@ -121,11 +121,13 @@ for file in paths_of:
                 exist = False
 
         if exist:
-            dif_bb = 30 - centroides_bb[12][0][1]
+            dif_bb = 30 - centroides_bb[round(n_frames/2)][0][1]
             M = np.float32([[1, 0, dif_bb], [0, 1, 0]])
             of_resizes_0 =  np.zeros([60, 60, 50])
             for k in range(len(of_resizes)):
-                imagetrans= cv2.warpAffine(of_resizes[k], M, (60, 60))
+                imagetrans = np.zeros([60, 80, 2])
+                imagetrans[int(bb_1[1]):int(bb_1[3]), int(bb_1[0]):int(bb_1[2]), :] = of_resizes[k][int(bb_1[1]):int(bb_1[3]), int(bb_1[0]):int(bb_1[2]), :]
+                imagetrans= cv2.warpAffine(imagetrans, M, (60, 60))
                 of_resizes_0[:,:,2*k:2*k+2] = imagetrans
 
         exist = True
@@ -134,10 +136,13 @@ for file in paths_of:
                 exist = False
 
         if exist:
-            dif_bb = 30 - centroides_bb[12][1][1]
+            dif_bb = 30 - centroides_bb[round(n_frames/2)][1][1]
             M = np.float32([[1, 0, dif_bb], [0, 1, 0]])
             of_resizes_1 = np.zeros([60, 60, 50])
             for k in range(len(of_resizes)):
+                bb_1 = bb[k][1]
+                imagetrans = np.zeros([60, 80, 2])
+                imagetrans[int(bb_1[1]):int(bb_1[3]), int(bb_1[0]):int(bb_1[2]), :] = of_resizes[k][int(bb_1[1]):int(bb_1[3]),int(bb_1[0]):int(bb_1[2]), :]
                 imagetrans= cv2.warpAffine(of_resizes[k], M, (60, 60))
                 of_resizes_1[:, :, 2 * k:2 * k + 2] = imagetrans
 

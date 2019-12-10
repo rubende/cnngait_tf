@@ -66,11 +66,11 @@ Script that calculates and stores the silhouettes of the videos of the original 
 It is necessary to modify the following paths within the script:
 
 ```
-PATH_TO_RESEARCH = '/tensorflow/models/research/'						# Path to /tensorflow/models/research/ installation folder
+PATH_TO_RESEARCH = '/tensorflow/models/research/'	# Path to /tensorflow/models/research/ installation folder
 
-PATH_TO_TEST_IMAGES_DIR = '/TUM_GAID/image'         					# Path to the original images of the dataset
+PATH_TO_TEST_IMAGES_DIR = '/TUM_GAID/image'			# Path to the original images of the dataset
 
-OUTPUT_PATH = '/TUM_GAID/silhouettes/'              					# Output path
+OUTPUT_PATH = '/TUM_GAID/silhouettes/'				# Output path
 ```
 
 ### generateArtificialVideosOne
@@ -80,13 +80,13 @@ Generate artificial videos with a single subject using a background image. Backg
 It is necessary to modify the following paths within the script:
 
 ```
-PATH_TO_IMAGES_DIR = '/TUM_GAID/image/'                                 # Path to the original images of the dataset
+PATH_TO_IMAGES_DIR = '/TUM_GAID/image/'				# Path to the original images of the dataset
 
-PATH_TO_SIL_DIR = '/TUM_GAID/silhouettes/'                              # Path to the calculated silhouettes
+PATH_TO_SIL_DIR = '/TUM_GAID/silhouettes/'          # Path to the calculated silhouettes
 
-PATH_ID_FILE = '/TUM_GAID/tumgaidtestids.lst'                           # Path to id list. Used by us to build the test dataset with the indicated users
+PATH_ID_FILE = '/TUM_GAID/tumgaidtestids.lst'		# Path to id list. Used by us to build the test dataset with the indicated users
 
-OUTPUT_PATH = "/MulPerGait_one_person/"                                 # Output path
+OUTPUT_PATH = "/MulPerGait_one_person/"             # Output path
 ```
 
 ### generateArtificialVideosTwo
@@ -96,13 +96,13 @@ Generate artificial videos with two subjects.
 It is necessary to modify the following paths within the script:
 
 ```
-PATH_TO_IMAGES_DIR = '/TUM_GAID/image/'                                 # Path to the original images of the dataset
+PATH_TO_IMAGES_DIR = '/TUM_GAID/image/'				# Path to the original images of the dataset
 
-PATH_TO_SIL_DIR = '/TUM_GAID/silhouettes/'                              # Path to the calculated silhouettes
+PATH_TO_SIL_DIR = '/TUM_GAID/silhouettes/'          # Path to the calculated silhouettes
 
-PATH_ID_FILE = '/TUM_GAID/tumgaidtestids.lst'                           # Path to id list. Used by us to build the test dataset with the indicated users
+PATH_ID_FILE = '/TUM_GAID/tumgaidtestids.lst'			# Path to id list. Used by us to build the test dataset with the indicated users
 
-OUTPUT_PATH = "/MulPerGait_two_persons/"                                # Output path
+OUTPUT_PATH = "/MulPerGait_two_persons/"                # Output path
 ```
 
 ## Experiments
@@ -115,9 +115,9 @@ Script that calculates and stores the bounding boxes of the subjects in generate
 It is necessary to modify the following paths within the script:
 
 ```
-PATH_TO_TEST_IMAGES_DIR = '/MulPerGait_two_persons/'                # Path to generated dataset
+PATH_TO_TEST_IMAGES_DIR = '/MulPerGait_two_persons/'	# Path to generated dataset
 
-OUTPUT_PATH = '/MulPerGait_two_persons_bb/'                         # Output path
+OUTPUT_PATH = '/MulPerGait_two_persons_bb/'             # Output path
 ```
 
 ### cnnTracker
@@ -130,11 +130,11 @@ It is necessary to modify the following paths within the script:
 ```
 PATH_TO_TEST_IMAGES_ORIGINAL_DIR = '/MulPerGait_two_persons/'       	# Path to generated dataset
 
-PATH_TO_OF_DIR = '/MulPerGait_two_persons_of/'                          # Path to optical flow of the generated dataset
+PATH_TO_OF_DIR = '/MulPerGait_two_persons_of/'         	# Path to optical flow of the generated dataset
 
-PATH_TO_BB_DIR = '/MulPerGait_two_persons_bb/'                          # Path to bounding boxes of the generated dataset
+PATH_TO_BB_DIR = '/MulPerGait_two_persons_bb/'          # Path to bounding boxes of the generated dataset
 
-OUTPUT_PATH = "/MulPerGait_two_persons_cnn_tr/"                         # Output path
+OUTPUT_PATH = "/MulPerGait_two_persons_cnn_tr/"         # Output path
 ```
 
 ### generate25Frames
@@ -144,20 +144,21 @@ Generates samples windows with 25 frame. Synthetic videos, and their previously 
 It is necessary to modify the following paths within the script:
 
 ```
-PATH_TO_OF = '/MulPerGait_two_persons_of/'              				# Path to optical flow of the generated dataset
+PATH_TO_OF = '/MulPerGait_two_persons_of/'              # Path to optical flow of the generated dataset
 
-PATH_TO_TR = '/MulPerGait_two_persons_cnn_tr/'          				# Path to tracking information of the generated dataset
+PATH_TO_TR = '/MulPerGait_two_persons_cnn_tr/'          # Path to tracking information of the generated dataset
 
-PATH_TO_IMAGE = '/MulPerGait_two_persons/'              				# Path to generated dataset
+PATH_TO_IMAGE = '/MulPerGait_two_persons/'              # Path to generated dataset
 
-OUTPUT_PATH = '/MulPerGait_two_persons_cnn_25f/'        				# Output path
+OUTPUT_PATH = '/MulPerGait_two_persons_cnn_25f/'        # Output path
 ```
 
 ### train_150
 
+
 ```
-INPUT_PATH = "/inputs_N150/"                    						# Input data from TUM-GAID dataset. Into /inputs_N150/ we have 3 folders, one for video type. Into this folders, we stored one tfrecord file per video.
-OUTPUT_PATH = "/outputs/"                       						# Output path, where we store the resulting model.
+INPUT_PATH = "/inputs_N150/"					# Input data from TUM-GAID dataset. Into /inputs_N150/ we have 3 folders, one for video type. Into this folders, we stored one tfrecord file per video.
+OUTPUT_PATH = "/outputs/"						# Output path, where we store the resulting model.
 ```
 
 ### train_155
@@ -168,14 +169,32 @@ INPUT_PATH = "/inputs_N155/"                    # Input data from TUM-GAID datas
 OUTPUT_PATH = "/outputs/"                       # Output path, where we store the resulting model.
 ```
 
+
 ### PredictModel_one_person
 
+```
+PATH_ID_FILE = "tumgaidtestids.lst"                             # File with the IDs of the users that we are going to use
+PATH_25F_INPUT = '/MulPerGait_one_person_cnn_25f/'              # Path with samples windows with 25 frame
+PATH_MODEL_CNN = "/outputs/model_155.h5"                        # Model_155 path
+```
 
 
 ### PredictModel_two_persons_individual
 
+
+```
+PATH_ID_FILE = "tumgaidtestids.lst"                             # File with the IDs of the users that we are going to use
+PATH_25F_INPUT = '/MulPerGait_two_persons_cnn_25f/'             # Path with samples windows with 25 frame
+PATH_MODEL_CNN = "/outputs/model_155.h5"                        # Model_155 path
+```
+
 ### PredictModel_two_persons_all
 
+```
+PATH_ID_FILE = "tumgaidtestids.lst"                             # File with the IDs of the users that we are going to use
+PATH_25F_INPUT = '/MulPerGait_two_persons_cnn_25f/'             # Path with samples windows with 25 frame
+PATH_MODEL_CNN = "/outputs/model_155.h5"                        # Model_155 path
+```
 
 ## Authors
 
