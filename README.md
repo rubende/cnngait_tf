@@ -1,4 +1,4 @@
-# MulPerGait: The Multiple Person Gait framework
+# MuPeG: The Multiple Person Gait framework
 
 One Paragraph of project description goes here
 
