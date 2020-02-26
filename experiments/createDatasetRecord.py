@@ -23,7 +23,7 @@ def parse_fn(example):
   parsed = tf.parse_example(example, image_feature_description)
 
   parsed['data'] = tf.decode_raw(parsed['data'], tf.int16)
-  parsed['data'] = tf.math.divide(tf.cast(parsed['data'], tf.float32), 100.0)
+  parsed['data'] = tf.math.divide(tf.cast(parsed['data'], tf.float32), 1000.0)
   return parsed['data'], parsed["labels"]
 
 
@@ -46,7 +46,7 @@ def parse_fn_test(example):
   parsed = tf.parse_example(example, image_feature_description)
 
   parsed['data'] = tf.decode_raw(parsed['data'], tf.int16)
-  parsed['data'] = tf.math.divide(tf.cast(parsed['data'], tf.float32), 100.0)
+  parsed['data'] = tf.math.divide(tf.cast(parsed['data'], tf.float32), 1000.0)
   return parsed['data'], parsed["labels"]
 
 
@@ -68,7 +68,7 @@ def parse_fn_testVote(example):
   parsed = tf.parse_example(example, image_feature_description)
 
   parsed['data'] = tf.decode_raw(parsed['data'], tf.int16)
-  parsed['data'] = tf.math.divide(tf.cast(parsed['data'], tf.float32), 100.0)
+  parsed['data'] = tf.math.divide(tf.cast(parsed['data'], tf.float32), 1000.0)
   return parsed['data'], parsed["labels"], parsed['videoId']
 
 
@@ -87,7 +87,7 @@ def parse_fn_predict(example):
   parsed = tf.parse_example(example, image_feature_description)
 
   parsed['data'] = tf.decode_raw(parsed['data'], tf.int16)
-  parsed['data'] = tf.math.divide(tf.cast(parsed['data'], tf.float32), 100.0)
+  parsed['data'] = tf.math.divide(tf.cast(parsed['data'], tf.float32), 1000.0)
   return parsed['data']
 
 def create_dataset(path, percentaje_val):
