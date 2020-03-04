@@ -1,36 +1,22 @@
 # MuPeG: The Multiple Person Gait framework
 
-One Paragraph of project description goes here
+Gait recognition on scenes with multiple people.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+TO DO.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+This code needs TensorFlow library to run.
 
 ```
-Give examples
+pip install tensorflow-gpu
 ```
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
+TO DO
 
 ## Create synthetic database
 
@@ -210,12 +196,20 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 If you use these framework in your research, please cite:
 
 ```
-
+@Article{delgado2020mupeg,
+AUTHOR = {Delgado-Escaño, Rubén and Castro, Francisco M. and Cózar, Julián R. and Marín-Jiménez, Manuel J. and Guil, Nicolás},
+TITLE = {MuPeG—The Multiple Person Gait Framework},
+JOURNAL = {Sensors},
+VOLUME = {20},
+YEAR = {2020},
+NUMBER = {5},
+ARTICLE-NUMBER = {1358},
+URL = {https://www.mdpi.com/1424-8220/20/5/1358},
+ISSN = {1424-8220},
+DOI = {10.3390/s20051358}
+}
 ```
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
-
+* We thank the reviewers for their helpful comments.
