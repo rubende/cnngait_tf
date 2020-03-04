@@ -2,6 +2,8 @@
 
 Gait recognition on scenes with multiple people.
 
+The paper describing this framework is available [here](https://www.mdpi.com/1424-8220/20/5/1358).
+
 ## Getting Started
 
 TO DO.
@@ -193,20 +195,20 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Citation
 
-If you use these framework in your research, please cite:
+If you use this framework in your research, please cite:
 
 ```
 @Article{delgado2020mupeg,
-AUTHOR = {Delgado-Escaño, Rubén and Castro, Francisco M. and Cózar, Julián R. and Marín-Jiménez, Manuel J. and Guil, Nicolás},
-TITLE = {MuPeG—The Multiple Person Gait Framework},
-JOURNAL = {Sensors},
-VOLUME = {20},
-YEAR = {2020},
-NUMBER = {5},
-ARTICLE-NUMBER = {1358},
-URL = {https://www.mdpi.com/1424-8220/20/5/1358},
-ISSN = {1424-8220},
-DOI = {10.3390/s20051358}
+  AUTHOR = {Delgado-Escaño, Rubén and Castro, Francisco M. and Cózar, Julián R. and Marín-Jiménez, Manuel J. and Guil, Nicolás},
+  TITLE = {MuPeG—The Multiple Person Gait Framework},
+  JOURNAL = {Sensors},
+  VOLUME = {20},
+  YEAR = {2020},
+  NUMBER = {5},
+  ARTICLE-NUMBER = {1358},
+  URL = {https://www.mdpi.com/1424-8220/20/5/1358},
+  ISSN = {1424-8220},
+  DOI = {10.3390/s20051358}
 }
 ```
 
