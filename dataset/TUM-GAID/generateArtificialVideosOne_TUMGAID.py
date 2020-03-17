@@ -31,7 +31,7 @@ def generate_image(image_base, image_silhouettes, mask_silhouettes):
     return image_base + image_silhouettes
 
 
-ids = np.loadtxt(PATH_ID_FILE).astype(int)
+ids = np.loadtxt(PATH_ID_FILE).astype(int)                               # Id of users used to generate videos
 
 perm_ids_1 = np.random.permutation(ids)
 

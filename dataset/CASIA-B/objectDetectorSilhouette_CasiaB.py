@@ -27,9 +27,9 @@ import tensorflow as tf
 
 PATH_TO_RESEARCH = '/tensorflow/models/research/'                   # Path to /tensorflow/models/research/ installation folder
 
-PATH_TO_TEST_IMAGES_DIR = '/TUM_GAID/image'                         # Path to the original images of the dataset
+PATH_TO_TEST_IMAGES_DIR = '/CASIA-B'                                # Path to the original images of the dataset
 
-OUTPUT_PATH = '/TUM_GAID/silhouettes/'                              # Output path
+OUTPUT_PATH = '/CASIA-B_silhouettes/'                               # Output path
 
 
 # if tf.__version__ < '1.5.0':
@@ -47,7 +47,6 @@ _MODEL_URLS = {
 }
 
 Config = collections.namedtuple('Config', 'model_url, model_dir')
-
 
 def get_config(model_name, model_dir):
     return Config(_MODEL_URLS[model_name], model_dir)
@@ -106,7 +105,7 @@ class DeepLabModel(object):
         with self.graph.as_default():
             tf.import_graph_def(graph_def, name='')
 
-        self.sess = tf.Session(graph=self.graph)
+        self.sess = tf.Session(graph=self.graph, config=config)
 
     def run(self, image):
         """Runs inference on a single image.
@@ -160,20 +159,35 @@ def vis_segmentation(image, seg_map, nom_arch):
 
 
 
-TEST_IMAGE_PATHS = [f for f in glob.glob(PATH_TO_TEST_IMAGES_DIR + "/**/*.jpg", recursive=True)]
-#subdirs = [os.path.join(PATH_TO_TEST_IMAGES_DIR, o) for o in os.listdir(PATH_TO_TEST_IMAGES_DIR) if os.path.isdir(os.path.join(PATH_TO_TEST_IMAGES_DIR,o))]
+
+TEST_IMAGE_PATHS = [f for f in glob.glob(PATH_TO_TEST_IMAGES_DIR + "*-090.avi", recursive=True)]        # In our case, we only use the 90º videos
 
 
-for image_path in TEST_IMAGE_PATHS:
-    image = Image.open(image_path)
-    resized_im, seg_map = model.run(image)
-    seg_image = get_dataset_colormap.label_to_color_image(
-        seg_map, get_dataset_colormap.get_pascal_name()).astype(np.uint8)
-    # im_arch=str(im_arch)
-    # nom_arch='c'+im_arch + '.jpg'
-    basename = image_path.replace(PATH_TO_TEST_IMAGES_DIR,"")
-    open_cv_image = np.array(seg_image)
-    open_cv_image = open_cv_image[:, :, ::-1].copy()
-    os.makedirs(OUTPUT_PATH + basename.replace(ntpath.basename(image_path), ""),
-                exist_ok=True)
-    cv2.imwrite(OUTPUT_PATH + basename, open_cv_image)
+for video_path in TEST_IMAGE_PATHS:
+
+    basename = video_path.replace(PATH_TO_TEST_IMAGES_DIR, "")
+
+    os.makedirs(
+        OUTPUT_PATH + basename[:-4],
+        exist_ok=True)
+
+    counter = 0
+    vidcap = cv2.VideoCapture(video_path)
+    success, image = vidcap.read()
+    while success:
+
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        pil_im = Image.fromarray(image)
+        resized_im, seg_map = model.run(pil_im)
+        seg_image = get_dataset_colormap.label_to_color_image(
+            seg_map, get_dataset_colormap.get_pascal_name()).astype(np.uint8)
+        open_cv_image = np.array(seg_image)
+        open_cv_image = open_cv_image[:, :, ::-1].copy()
+        if np.all(open_cv_image==0):               #Esto es lo nuevo
+            success, image = vidcap.read()
+            counter = counter + 1
+            continue
+        cv2.imwrite(OUTPUT_PATH + basename[:-4]+"/"+str(counter).zfill(3)+".jpg", open_cv_image)
+        success, image = vidcap.read()
+        counter = counter + 1
+

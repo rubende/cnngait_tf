@@ -4,7 +4,7 @@ import random
 import math
 
 
-def parse_fn(example):
+def parse_fn(example, mean=None):
   "Parse TFExample records and perform simple data augmentation."
   image_feature_description = {
       'height': tf.FixedLenFeature([], tf.int64),
@@ -23,52 +23,9 @@ def parse_fn(example):
   parsed = tf.parse_example(example, image_feature_description)
 
   parsed['data'] = tf.decode_raw(parsed['data'], tf.int16)
-  parsed['data'] = tf.math.divide(tf.cast(parsed['data'], tf.float32), 1000.0)
-  return parsed['data'], parsed["labels"]
-
-
-
-def parse_fn_test(example):
-  "Parse TFExample records and perform simple data augmentation."
-  image_feature_description = {
-      'height': tf.FixedLenFeature([], tf.int64),
-      'width': tf.FixedLenFeature([], tf.int64),
-      'depth': tf.FixedLenFeature([], tf.int64),
-      'data': tf.FixedLenFeature([], tf.string),
-      'labels': tf.FixedLenFeature([], tf.int64),
-      'set': tf.FixedLenFeature([], tf.int64),
-      'videoId': tf.FixedLenFeature([], tf.int64),
-      'compressFactor': tf.FixedLenFeature([], tf.int64),
-      'gait': tf.FixedLenFeature([], tf.int64),
-
-  }
-
-  parsed = tf.parse_example(example, image_feature_description)
-
-  parsed['data'] = tf.decode_raw(parsed['data'], tf.int16)
-  parsed['data'] = tf.math.divide(tf.cast(parsed['data'], tf.float32), 1000.0)
-  return parsed['data'], parsed["labels"]
-
-
-def parse_fn_testVote(example):
-  "Parse TFExample records and perform simple data augmentation."
-  image_feature_description = {
-      'height': tf.FixedLenFeature([], tf.int64),
-      'width': tf.FixedLenFeature([], tf.int64),
-      'depth': tf.FixedLenFeature([], tf.int64),
-      'data': tf.FixedLenFeature([], tf.string),
-      'labels': tf.FixedLenFeature([], tf.int64),
-      'set': tf.FixedLenFeature([], tf.int64),
-      'videoId': tf.FixedLenFeature([], tf.int64),
-      'compressFactor': tf.FixedLenFeature([], tf.int64),
-      'gait': tf.FixedLenFeature([], tf.int64),
-
-  }
-
-  parsed = tf.parse_example(example, image_feature_description)
-
-  parsed['data'] = tf.decode_raw(parsed['data'], tf.int16)
-  parsed['data'] = tf.math.divide(tf.cast(parsed['data'], tf.float32), 1000.0)
+  if mean != None:
+    parsed['data'] = tf.math.subtract(tf.cast(parsed['data'], tf.float32), mean)
+  parsed['data'] = tf.math.divide(tf.cast(parsed['data'], tf.float32), 100.0)
   return parsed['data'], parsed["labels"], parsed['videoId']
 
 
@@ -90,12 +47,14 @@ def parse_fn_predict(example):
   parsed['data'] = tf.math.divide(tf.cast(parsed['data'], tf.float32), 1000.0)
   return parsed['data']
 
+
+
 def create_dataset(path, percentaje_val):
     random.seed(0)
     tf.random.set_random_seed(0)
-    filenames0 = [f for f in glob.glob(path + "0/" + "**/*.record", recursive=True)]    # 160416
-    filenames1 = [f for f in glob.glob(path + "1/" + "**/*.record", recursive=True)]    # 53442
-    filenames2 = [f for f in glob.glob(path + "2/" + "**/*.record", recursive=True)]    # 55494
+    filenames0 = [f for f in glob.glob(path + "0/" + "**/*.record", recursive=True)] 
+    filenames1 = [f for f in glob.glob(path + "1/" + "**/*.record", recursive=True)]
+    filenames2 = [f for f in glob.glob(path + "2/" + "**/*.record", recursive=True)]
 
 
     random.shuffle(filenames0)
@@ -134,7 +93,27 @@ def create_dataset(path, percentaje_val):
     return filenames0, filenames1, filenames2, val_filenames0, val_filenames1, val_filenames2
 
 
-def create_tfrecord(batch, filenames0, filenames1, filenames2, index = None):
+
+
+def create_dataset_ft(path, percentaje_val):
+    random.seed(0)
+    tf.random.set_random_seed(0)
+    filenames0 = [f for f in glob.glob(path + "0/" + "**/*.record", recursive=True)]
+
+    random.shuffle(filenames0)
+
+
+    total = len(filenames0)
+    val_size = total * percentaje_val
+    val_filenames0 = filenames0[:math.floor(val_size/3)]
+    filenames0 = filenames0[math.floor(val_size/3):]
+
+    return filenames0, val_filenames0
+
+
+
+
+def create_tfrecord(batch, num_class, filenames0, filenames1, filenames2, index = None, mean = None):
 
     if index != None:
         index_0 = index % len(filenames0)
@@ -152,49 +131,47 @@ def create_tfrecord(batch, filenames0, filenames1, filenames2, index = None):
     dataset = dataset.repeat()
     dataset = dataset.prefetch(int(size/batch))
     dataset = dataset.batch(batch_size=batch)
-    dataset = dataset.map(map_func=parse_fn, num_parallel_calls=32)
+    dataset = dataset.map(lambda x: parse_fn(x, mean), num_parallel_calls=32)
     iter = dataset.make_one_shot_iterator()
-    image, label = iter.get_next()
+    image, label, videoId = iter.get_next()
     #image = tf.strings.to_number(string_tensor=image, out_type=tf.dtypes.float32) / 100
     image = tf.reshape(image, shape=(-1, 50, 60, 60))
-    label = tf.one_hot(label, 150)
+    label = tf.one_hot(label, num_class)
 
     return image, label
 
 
 
-def create_dataset_155(path, percentaje_val):
-    random.seed(0)
-    tf.random.set_random_seed(0)
-    filenames0 = [f for f in glob.glob(path + "0/" + "**/*.record", recursive=True)]
 
-    random.shuffle(filenames0)
-
-
-    total = len(filenames0)
-    val_size = total * percentaje_val
-    val_filenames0 = filenames0[:math.floor(val_size/3)]
-    filenames0 = filenames0[math.floor(val_size/3):]
-
-
-
-    return filenames0, val_filenames0
-
-
-def create_tfrecord_155(batch, filenames0):
+def create_tfrecord_ft(batch, num_class, filenames0, mean = None):
 
     dataset = tf.data.TFRecordDataset(filenames0)
     dataset = dataset.shuffle(buffer_size=(len(filenames0)))
     dataset = dataset.repeat()
     dataset = dataset.prefetch(int(len(filenames0)/batch))
     dataset = dataset.batch(batch_size=batch)
-    dataset = dataset.map(map_func=parse_fn, num_parallel_calls=32)
+    dataset = dataset.map(lambda x: parse_fn(x, mean), num_parallel_calls=32)
     iter = dataset.make_one_shot_iterator()
-    image, label = iter.get_next()
+    image, label, videoId = iter.get_next()
     image = tf.reshape(image, shape=(-1, 50, 60, 60))
-    label = tf.one_hot(label, 155)
+    label = tf.one_hot(label, num_class)
 
     return image, label
+
+
+
+
+
+
+
+
+
+
+
+
+
+#######################################################################################
+
 
 
 def create_tfrecord_155_test(batch, filenames0):

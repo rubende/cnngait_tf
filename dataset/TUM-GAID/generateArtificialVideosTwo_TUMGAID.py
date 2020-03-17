@@ -9,7 +9,7 @@ PATH_TO_SIL_DIR = '/TUM_GAID/silhouettes/'                              # Path t
 
 PATH_ID_FILE = '/TUM_GAID/tumgaidtestids.lst'                           # Path to id list. Used by us to build the test dataset with the indicated users
 
-OUTPUT_PATH = "/MulPerGait_two_persons/"                                 # Output path
+OUTPUT_PATH = "/MulPerGait_two_persons/"                                # Output path
 
 VIDEOS_BASE = ["b01", "b02", "n05", "n06", "s01", "s02"]                # We limit the types of video to use to maintain the same evaluation process
 VIDEOS_SIL = ["n05", "n06"]
@@ -31,7 +31,7 @@ def generate_image(image_base, image_silhouettes, mask_silhouettes):
     return image_base + image_silhouettes
 
 
-ids = np.loadtxt(PATH_ID_FILE).astype(int)
+ids = np.loadtxt(PATH_ID_FILE).astype(int)                               # Id of users used to generate videos
 
 perm_ids_1 = np.random.permutation(ids)
 
