@@ -5,47 +5,29 @@ import math
 
 
 def parse_fn(example, mean=None):
-  "Parse TFExample records and perform simple data augmentation."
-  image_feature_description = {
-      'height': tf.FixedLenFeature([], tf.int64),
-      'width': tf.FixedLenFeature([], tf.int64),
-      'depth': tf.FixedLenFeature([], tf.int64),
-      'data': tf.FixedLenFeature([], tf.string),
-      'labels': tf.FixedLenFeature([], tf.int64),
-      'set': tf.FixedLenFeature([], tf.int64),
-      'videoId': tf.FixedLenFeature([], tf.int64),
-      'compressFactor': tf.FixedLenFeature([], tf.int64),
-      'gait': tf.FixedLenFeature([], tf.int64),
-      'mirrors': tf.FixedLenFeature([], tf.int64),
+    "Parse TFExample records and perform simple data augmentation."
+    image_feature_description = {
+        'height': tf.FixedLenFeature([], tf.int64),
+        'width': tf.FixedLenFeature([], tf.int64),
+        'depth': tf.FixedLenFeature([], tf.int64),
+        'data': tf.FixedLenFeature([], tf.string),
+        'labels': tf.FixedLenFeature([], tf.int64),
+        'set': tf.FixedLenFeature([], tf.int64),
+        'videoId': tf.FixedLenFeature([], tf.int64),
+        'compressFactor': tf.FixedLenFeature([], tf.int64),
+        'gait': tf.FixedLenFeature([], tf.int64),
+        'mirrors': tf.FixedLenFeature([], tf.int64),
 
-  }
+    }
 
-  parsed = tf.parse_example(example, image_feature_description)
+    parsed = tf.parse_example(example, image_feature_description)
 
-  parsed['data'] = tf.decode_raw(parsed['data'], tf.int16)
-  if mean != None:
-    parsed['data'] = tf.math.subtract(tf.cast(parsed['data'], tf.float32), mean)
-  parsed['data'] = tf.math.divide(tf.cast(parsed['data'], tf.float32), 100.0)
-  return parsed['data'], parsed["labels"], parsed['videoId']
+    parsed['data'] = tf.decode_raw(parsed['data'], tf.int16)
+    if mean is not None:
+        parsed['data'] = tf.math.subtract(tf.cast(parsed['data'], tf.float32), mean)
+    parsed['data'] = tf.math.divide(tf.cast(parsed['data'], tf.float32), 100.0)
 
-
-
-def parse_fn_predict(example):
-  "Parse TFExample records and perform simple data augmentation."
-  image_feature_description = {
-      'height': tf.FixedLenFeature([], tf.int64),
-      'width': tf.FixedLenFeature([], tf.int64),
-      'depth': tf.FixedLenFeature([], tf.int64),
-      'data': tf.FixedLenFeature([], tf.string),
-      'compressFactor': tf.FixedLenFeature([], tf.int64),
-
-  }
-
-  parsed = tf.parse_example(example, image_feature_description)
-
-  parsed['data'] = tf.decode_raw(parsed['data'], tf.int16)
-  parsed['data'] = tf.math.divide(tf.cast(parsed['data'], tf.float32), 1000.0)
-  return parsed['data']
+    return parsed['data'], parsed["labels"], parsed['videoId']
 
 
 
@@ -159,6 +141,18 @@ def create_tfrecord_ft(batch, num_class, filenames0, mean = None):
     return image, label
 
 
+def create_tfrecord_predict(batch, filenames0, mean = None):
+
+    dataset = tf.data.TFRecordDataset(filenames0)
+    dataset = dataset.repeat()
+    dataset = dataset.prefetch(int(len(filenames0)/batch))
+    dataset = dataset.batch(batch_size=batch)
+    dataset = dataset.map(lambda x: parse_fn(x, mean), num_parallel_calls=32)
+    iter = dataset.make_one_shot_iterator()
+    image, label, videoId = iter.get_next()
+    image = tf.reshape(image, shape=(-1, 50, 60, 60))
+
+    return image
 
 
 
@@ -206,15 +200,3 @@ def create_tfrecord_155_testVote(batch, filenames0):
     return image, label, videoId
 
 
-def create_tfrecord_155_predict(batch, filenames0):
-
-    dataset = tf.data.TFRecordDataset(filenames0)
-    dataset = dataset.repeat()
-    dataset = dataset.prefetch(int(len(filenames0)/batch))
-    dataset = dataset.batch(batch_size=batch)
-    dataset = dataset.map(map_func=parse_fn_predict, num_parallel_calls=32)
-    iter = dataset.make_one_shot_iterator()
-    image = iter.get_next()
-    image = tf.reshape(image, shape=(-1, 50, 60, 60))
-
-    return image

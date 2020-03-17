@@ -3,11 +3,13 @@ import tensorflow as tf
 import os
 import numpy as np
 import glob
-import createDatasetRecord
 import keras
 from keras import optimizers
 from scipy import stats
 import math
+import importlib
+createDatasetRecord = importlib.import_module('cnngait_tf.experiments.Common.createDatasetRecord')
+Model = importlib.import_module('cnngait_tf.experiments.Common.Model')
 
 
 PATH_ID_FILE = "tumgaidtestids.lst"                             # File with the IDs of the users that we are going to use
@@ -53,18 +55,9 @@ graph = tf.Graph()
 with graph.as_default():
     sess = tf.Session(config=config, graph=graph)
     with sess.as_default():
-        images = createDatasetRecord.create_tfrecord_155_predict(batch, filenames0)
-        model = load_model(PATH_MODEL_CNN)
-        lr = model.optimizer.lr
-        model.layers.pop(0)
-        newInput = keras.layers.Input(tensor=images)
-        newOutput = model(newInput)
-        model = keras.models.Model(inputs=newInput, outputs=newOutput)
-        model.compile(loss='categorical_crossentropy', optimizer=optimizers.SGD(lr, 0.9),
-                      metrics=['accuracy'])
-        model.summary()
-
-        t = model.predict(images, steps=math.ceil(len(filenames0)/batch))
+        images = createDatasetRecord.create_tfrecord_predict(batch, filenames0)
+        model = Model()
+        t = model.load_to_predict(PATH_MODEL_CNN, images, math.ceil(len(filenames0) / batch))
 
 
 results = []

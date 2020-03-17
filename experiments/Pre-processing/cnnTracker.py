@@ -11,19 +11,22 @@ from keras.models import Model
 from scipy.spatial.distance import pdist
 
 
-PATH_TO_TEST_IMAGES_ORIGINAL_DIR = '/MulPerGait_two_persons/'                   # Path to generated dataset
+PATH_TO_TEST_IMAGES_ORIGINAL_DIR = '/videos_two_persons/'                   # Path to generated dataset
 
-PATH_TO_OF_DIR = '/MulPerGait_two_persons_of/'                                  # Path to optical flow of the generated dataset
+PATH_TO_OF_DIR = '/videos_two_persons_of/'                                  # Path to optical flow of the generated dataset
 
-PATH_TO_BB_DIR = '/MulPerGait_two_persons_bb/'                                  # Path to bounding boxes of the generated dataset
+PATH_TO_BB_DIR = '/videos_two_persons_bb/'                                  # Path to bounding boxes of the generated dataset
 
-OUTPUT_PATH = "/MulPerGait_two_persons_cnn_tr/"                                 # Output path
+OUTPUT_PATH = "/videos_two_persons_cnn_tr/"                                 # Output path
 
+
+# Size of the images.
+im_height = 480
+im_width = 640
 
 
 TEST_IMAGE_ORIGINAL_PATHS = [f for f in glob.glob(PATH_TO_TEST_IMAGES_ORIGINAL_DIR + "**/*.mp4", recursive=True)]
-im_height = 480
-im_width = 640
+
 
 model = ResNet50(include_top=True, weights='imagenet', input_tensor=None, input_shape=None, pooling=None, classes=1000)
 intermediate_layer_model = Model(inputs=model.input,

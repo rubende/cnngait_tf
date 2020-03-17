@@ -30,10 +30,13 @@ from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as vis_util
 
 
-PATH_TO_TEST_IMAGES_DIR = '/MulPerGait_two_persons/'                # Path to generated dataset
+PATH_TO_TEST_IMAGES_DIR = '/videos_two_persons/'                # Path to generated dataset
 
-OUTPUT_PATH = '/MulPerGait_two_persons_bb/'                         # Output path
+OUTPUT_PATH = '/videos_two_persons_bb/'                         # Output path
 
+# Size of the images.
+width  = 640
+height = 480
 
 TEST_IMAGE_PATHS = [f for f in glob.glob(PATH_TO_TEST_IMAGES_DIR + "*.mp4", recursive=True)]
 
@@ -69,14 +72,8 @@ with detection_graph.as_default():
 category_index = label_map_util.create_category_index_from_labelmap(PATH_TO_LABELS, use_display_name=True)
 
 def load_image_into_numpy_array(image):
-  #(im_width, im_height) = image.size
-  #return np.array(image.getdata()).reshape(
-  #    (im_height, im_width, 3)).astype(np.uint8)
   return np.array(image).astype(np.uint8)
 
-
-# Size, in inches, of the output images.
-IMAGE_SIZE = (480, 640)
 
 def run_inference_for_single_image(image, graph):
   with graph.as_default():
@@ -149,7 +146,7 @@ def run_inference_for_multiple_image(images, graph):
         detection_boxes = tf.slice(detection_boxes, [0, 0], [real_num_detection, -1])
         detection_masks = tf.slice(detection_masks, [0, 0, 0], [real_num_detection, -1, -1])
         detection_masks_reframed = utils_ops.reframe_box_masks_to_image_masks(
-            detection_masks, detection_boxes, 480, 640)
+            detection_masks, detection_boxes, height, width)
         detection_masks_reframed = tf.cast(
             tf.greater(detection_masks_reframed, 0.5), tf.uint8)
         # Follow the convention by adding back the batch dimension

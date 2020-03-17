@@ -106,3 +106,19 @@ class Network:
         x = Dropout(dropout)(x)
         self.model = Model(self.model.layers[0].input, x)
         self.model.layers.pop(0)
+
+    def load_to_predict(self, path, images, steps):
+
+        # Load Model
+        self.model = load_model(path)
+
+        newInput = Input(tensor=images)
+        newOutput = self.model(newInput)
+        model_input = Model(inputs=newInput, outputs=newOutput)
+
+        model_input.compile(loss='categorical_crossentropy', optimizer=optimizers.SGD(),
+                      metrics=['accuracy'])
+
+        predictions = model_input.predict(images, steps=steps)
+
+        return predictions

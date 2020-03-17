@@ -7,13 +7,19 @@ import pickle
 import tensorflow as tf
 
 
-PATH_TO_OF = '/MulPerGait_two_persons_of/'              # Path to optical flow of the generated dataset
+PATH_TO_OF = '/video_two_persons_of/'              # Path to optical flow of the generated dataset
 
-PATH_TO_TR = '/MulPerGait_two_persons_cnn_tr/'          # Path to tracking information of the generated dataset
+PATH_TO_TR = '/video_two_persons_cnn_tr/'          # Path to tracking information of the generated dataset
 
-PATH_TO_IMAGE = '/MulPerGait_two_persons/'              # Path to generated dataset
+PATH_TO_IMAGE = '/video_two_persons/'              # Path to generated dataset
 
-OUTPUT_PATH = '/MulPerGait_two_persons_cnn_25f/'        # Output path
+OUTPUT_PATH = '/video_two_persons_cnn_25f/'        # Output path
+
+n_frames = 25       # Number of frames to stack
+
+# Size of the images.
+im_height = 480
+im_width = 640
     
 
 # The following functions can be used to convert a value to a type compatible
@@ -32,11 +38,10 @@ def _int64_feature(value):
   return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
 
 
-
 def create_tf_example(data):
 
-  height = 60 # Image height
-  width = 60 # Image width
+  height = 60                   # Image height
+  width = 60                    # Image width
   depth = 50
   compressFactor = 100
 
@@ -52,13 +57,8 @@ def create_tf_example(data):
 
 np.random.seed(0)
 
-n_frames = 25
-
-im_height = 480
-im_width = 640
-
-x_scale = 80 / 640
-y_scale = 60 / 480
+x_scale = 80 / im_width
+y_scale = 60 / im_height
 
 paths_of = sorted([f.replace(PATH_TO_OF, "") for f in glob.glob(
             PATH_TO_OF + "/*.mat",
