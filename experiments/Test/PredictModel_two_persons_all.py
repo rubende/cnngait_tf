@@ -1,10 +1,7 @@
-from keras.models import load_model
 import tensorflow as tf
 import os
 import numpy as np
 import glob
-import keras
-from keras import optimizers
 from scipy import stats
 import math
 import importlib

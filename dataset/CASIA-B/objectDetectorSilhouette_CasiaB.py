@@ -1,26 +1,15 @@
 ## Based in code from https://averdones.github.io/real-time-semantic-image-segmentation-with-deeplab-in-tensorflow/
 
 ## Imports
-
-import collections
 import os
-import io
 import sys
 import tarfile
 import tempfile
 import urllib
-import time
-from IPython import display
-from ipywidgets import interact
-from ipywidgets import interactive
-from matplotlib import gridspec
-from matplotlib import pyplot as plt
 import numpy as np
 from PIL import Image
 import glob
 import cv2
-import ntpath
-import pickle
 import tensorflow as tf
 
 
@@ -46,20 +35,10 @@ _MODEL_URLS = {
     'xception_coco_voctrainval': 'http://download.tensorflow.org/models/deeplabv3_pascal_trainval_2018_01_04.tar.gz',
 }
 
-Config = collections.namedtuple('Config', 'model_url, model_dir')
-
-def get_config(model_name, model_dir):
-    return Config(_MODEL_URLS[model_name], model_dir)
-
-
-config_widget = interactive(get_config, model_name=_MODEL_URLS.keys(), model_dir='')
-display.display(config_widget)
-
-# Check configuration and download the model
+# Download the model
 
 _TARBALL_NAME = 'deeplab_model.tar.gz'
 
-config = config_widget.result
 # model_dir = config.model_dir or tempfile.mkdtemp()
 
 # config = 'http://download.tensorflow.org/models/deeplabv3_pascal_train_aug_2018_01_04.tar.gz' # nueva
@@ -105,7 +84,7 @@ class DeepLabModel(object):
         with self.graph.as_default():
             tf.import_graph_def(graph_def, name='')
 
-        self.sess = tf.Session(graph=self.graph, config=config)
+        self.sess = tf.Session(graph=self.graph)
 
     def run(self, image):
         """Runs inference on a single image.
@@ -141,22 +120,6 @@ LABEL_NAMES = np.asarray([
 
 FULL_LABEL_MAP = np.arange(len(LABEL_NAMES)).reshape(len(LABEL_NAMES), 1)
 FULL_COLOR_MAP = get_dataset_colormap.label_to_color_image(FULL_LABEL_MAP)
-
-
-def vis_segmentation(image, seg_map, nom_arch):
-    plt.subplot(111)
-    seg_image = get_dataset_colormap.label_to_color_image(
-        seg_map, get_dataset_colormap.get_pascal_name()).astype(np.uint8)
-    plt.imshow(seg_image)
-    plt.axis('off')
-    plt.title('segmentation map')
-    grid_spec = gridspec.GridSpec(1, 4, width_ratios=[6, 6, 6, 1])
-    nom_arch = str(nom_arch)
-    nombre = nom_arch + '.jpg'
-    print(nombre)
-    plt.savefig(nombre)
-
-
 
 
 

@@ -74,12 +74,12 @@ with graph.as_default():
         # Create TFRecord to train
         images, labels = createDatasetRecordTUM.create_tfrecord_ft(batch, num_class, filenames0)
 
-        steps_per_epoch = int(len(filenames0) / batch)
-        validation_steps = int(len(val_filenames0) / batch)
+        steps_per_epoch = math.ceil((len(filenames0)) / batch)
+        validation_steps = math.ceil(len(val_filenames0) / batch)
 
         # Load model to FT, freeze layers and modify FC classification layer
         model = ModelTUM.Network()
-        model.load_to_ft(model_155_path, num_class, dropout)
+        model.load_to_ft(model_150_path, num_class, dropout)
 
         # Train model
         epoch = sum(epochs)

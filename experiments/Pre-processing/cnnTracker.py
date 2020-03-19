@@ -1,6 +1,5 @@
 import glob
 from  keras.applications.resnet50 import ResNet50
-import tensorflow as tf
 import os
 import ntpath
 import pickle
