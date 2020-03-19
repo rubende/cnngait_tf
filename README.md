@@ -14,7 +14,7 @@ Gait recognition is being employed as an effective approach to identify people w
 Examples with TUM-GAID and CASIA-B datasets:
 ![output_example](https://www.mdpi.com/sensors/sensors-20-01358/article_deploy/html/images/sensors-20-01358-g002.png)
 
-[![video output examples](https://img.youtube.com/vi/JB_sLVr279g/0.jpg)](https://www.youtube.com/watch?v=JB_sLVr279g)
+[![video output examples](https://gifs.com/gif/mupeg-example-output-in-tum-gaid-and-casia-b-JyR8vP)](https://www.youtube.com/watch?v=JB_sLVr279g)
 
 ## Getting Started
 
