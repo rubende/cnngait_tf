@@ -4,7 +4,7 @@
 
 - Francisco M. Castro, Manuel J. Marín-Jiménez, Nicolás Guil, Nicolás Pérez de la Blanca: “*Multimodal feature fusion for CNN-based gait recognition: an empirical comparison*”. Neural Computing and Applications (2020) [[Paper](https://arxiv.org/abs/1806.07753)] [[Code](https://github.com/avagait/cnngaitmm)]
 
-- Ruben Delgado-Escaño, Francisco M. Castro, JR Cózar, Manuel J. Marín-Jiménez, Nicolás Guil, Eduardo Casilari: “*A cross-dataset deep learning-based classifier for people fall detection and identification*”. Computer methods and programs in biomedicine 184: (2020) [[Paper](https://doi.org/10.1016/j.cmpb.2019.105265)]
+- Ruben Delgado-Escaño, Francisco M. Castro, JR Cózar, Manuel J. Marín-Jiménez, Nicolás Guil, Eduardo Casilari: “*A cross-dataset deep learning-based classifier for people fall detection and identification*”. Computer methods and programs in biomedicine 184: (2020) [[Paper](https://doi.org/10.1016/j.cmpb.2019.105265)] [[Code](https://github.com/rubende/CrossFall)]
 
 - Ruben Delgado-Escano, Francisco M. Castro, Julián Ramos Cózar, Manuel J. Marín-Jiménez, Nicolás Guil Mata: “*An End-to-End Multi-Task and Fusion CNN for Inertial-Based Gait Recognition*”. IEEE Access 7: 1897-1908 (2019) [[Paper](https://doi.org/10.1109/ACCESS.2018.2886899)]
 
