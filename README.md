@@ -1,5 +1,7 @@
 # Gait papers index
 
+- Ruben Delgado-Escaño, Francisco M. Castro, Nicolás Guil, Vicky Kalogeiton, Manuel J. Marín-Jiménez: “*Multimodal Gait Recognition Under Missing Modalities*”. IEEE International Conference on Image Processing (ICIP) (2021) [[Paper](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9506162)] [[Code](https://github.com/avagait/gaitmiss)]
+
 - Ruben Delgado-Escaño, Francisco M. Castro, JR Cózar, Manuel J. Marín-Jiménez, Nicolás Guil: “*MuPeG—The Multiple Person Gait Framework*”. Sensors 20 (5): 1358 (2020) [[Paper](https://doi.org/10.3390/s20051358)] [[Code](https://github.com/rubende/mupeg)]
 
 - Francisco M. Castro, Manuel J. Marín-Jiménez, Nicolás Guil, Nicolás Pérez de la Blanca: “*Multimodal feature fusion for CNN-based gait recognition: an empirical comparison*”. Neural Computing and Applications (2020) [[Paper](https://arxiv.org/abs/1806.07753)] [[Code](https://github.com/avagait/cnngaitmm)]
